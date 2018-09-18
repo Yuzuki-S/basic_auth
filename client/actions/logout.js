@@ -4,7 +4,7 @@ export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 
-function requestLogout () {
+function requestLogout () { //user wants to logout so we'll wait for our server to do this
   return {
     type: LOGOUT_REQUEST,
     isFetching: true,
@@ -12,7 +12,7 @@ function requestLogout () {
   }
 }
 
-function receiveLogout () {
+function receiveLogout () {  //user is no longer authenticated
   return {
     type: LOGOUT_SUCCESS,
     isFetching: false,
@@ -21,10 +21,10 @@ function receiveLogout () {
 }
 
 // Logs the user out
-export function logoutUser () {
+export function logoutUser () { //when user clicks logout
   return dispatch => {
-    dispatch(requestLogout())
-    removeUser()
-    dispatch(receiveLogout())
+    dispatch(requestLogout())  //we will dispatch this action which is above
+    removeUser()  //delete their access token
+    dispatch(receiveLogout())  //next we will actually say yep they're logged out
   }
 }

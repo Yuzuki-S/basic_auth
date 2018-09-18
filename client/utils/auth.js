@@ -29,6 +29,6 @@ export function getUserTokenInfo () {
   return token ? decode(token) : null
 }
 
-export function removeUser () {
+export function removeUser () {  //deletes your token, swipe card has been taken away so you don't have access to the door
   set('token', null)
 }

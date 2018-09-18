@@ -1,11 +1,12 @@
 import request from '../utils/api'
 import {saveUserToken} from '../utils/auth'
 
+//these crazy things below are just a convention since it's best practice to use const instead of strings as you might have typos 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 
-function requestLogin () {
+function requestLogin () { //requesting login and setting the redux state to fetching while we wait for a response. 
   return {
     type: LOGIN_REQUEST,
     isFetching: true,
@@ -23,6 +24,8 @@ export function receiveLogin (user) { //the server replied with a user object (u
 }
 
 function loginError (message) { //this function only runs is the response from our server is an error with login
+  console.log('hey the msg in login.js action is' + message);
+  
   return {
     type: LOGIN_FAILURE,
     isFetching: false,

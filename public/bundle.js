@@ -835,6 +835,7 @@ function getUserTokenInfo() {
 }
 
 function removeUser() {
+  //deletes your token, swipe card has been taken away so you don't have access to the door
   (0, _localstorage.set)('token', null);
 }
 
@@ -1029,11 +1030,13 @@ var _auth = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//these crazy things below are just a convention since it's best practice to use const instead of strings as you might have typos 
 var LOGIN_REQUEST = exports.LOGIN_REQUEST = 'LOGIN_REQUEST';
 var LOGIN_SUCCESS = exports.LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 var LOGIN_FAILURE = exports.LOGIN_FAILURE = 'LOGIN_FAILURE';
 
 function requestLogin() {
+  //requesting login and setting the redux state to fetching while we wait for a response. 
   return {
     type: LOGIN_REQUEST,
     isFetching: true,
@@ -1053,6 +1056,8 @@ function receiveLogin(user) {
 
 function loginError(message) {
   //this function only runs is the response from our server is an error with login
+  console.log('hey the msg in login.js action is' + message);
+
   return {
     type: LOGIN_FAILURE,
     isFetching: false,
@@ -1886,6 +1891,7 @@ var LOGOUT_SUCCESS = exports.LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 var LOGOUT_FAILURE = exports.LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 function requestLogout() {
+  //user wants to logout so we'll wait for our server to do this
   return {
     type: LOGOUT_REQUEST,
     isFetching: true,
@@ -1894,6 +1900,7 @@ function requestLogout() {
 }
 
 function receiveLogout() {
+  //user is no longer authenticated
   return {
     type: LOGOUT_SUCCESS,
     isFetching: false,
@@ -1903,10 +1910,11 @@ function receiveLogout() {
 
 // Logs the user out
 function logoutUser() {
+  //when user clicks logout
   return function (dispatch) {
-    dispatch(requestLogout());
-    (0, _auth.removeUser)();
-    dispatch(receiveLogout());
+    dispatch(requestLogout()); //we will dispatch this action which is above
+    (0, _auth.removeUser)(); //delete their access token
+    dispatch(receiveLogout()); //next we will actually say yep they're logged out
   };
 }
 
@@ -3712,11 +3720,13 @@ var REGISTER_REQUEST = exports.REGISTER_REQUEST = 'REGISTER_REQUEST';
 var REGISTER_FAILURE = exports.REGISTER_FAILURE = 'REGISTER_FAILURE';
 
 function requestRegister(creds) {
+  //the register request is received and state is set to thinking status.
   return {
     type: REGISTER_REQUEST,
     isFetching: true,
     isAuthenticated: false,
     creds: creds
+    //CREDS - this is the variable that holds the info entered into the form. we know this because the function on line 26 has that data -> assuming it's defined within react
   };
 }
 
@@ -3729,12 +3739,18 @@ function registerError(message) {
   };
 }
 
+//NOTE - when using this code set, ross has made the server only accept data in object format. 
+// CREDS must be an object. 
+//if your'e using forms and want say req.body.name , req.body.gender etc, you must make it an object first. 
+// e.g. let obj = {key: value, key: value} otherwise the server will reject it. this is just for this code however. 
+
 function registerUser(creds) {
   return function (dispatch) {
     // We dispatch requestRegister to kickoff the call to the API
     dispatch(requestRegister(creds));
 
-    return (0, _api2.default)('post', '/register', creds).then(function (response) {
+    return (0, _api2.default)('post', '/register', creds) //talking to the server here
+    .then(function (response) {
       if (!response.ok) {
         // If there was a problem, we want to
         // dispatch the error condition
@@ -3795,7 +3811,9 @@ var _api2 = _interopRequireDefault(_api);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var QUOTE_REQUEST = exports.QUOTE_REQUEST = 'QUOTE_REQUEST';
+var QUOTE_REQUEST = exports.QUOTE_REQUEST = 'QUOTE_REQUEST'; //this is quite heavy 8:30 pm right now
+
+
 var QUOTE_SUCCESS = exports.QUOTE_SUCCESS = 'QUOTE_SUCCESS';
 var QUOTE_FAILURE = exports.QUOTE_FAILURE = 'QUOTE_FAILURE';
 

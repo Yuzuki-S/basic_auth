@@ -1,3 +1,6 @@
+//this is quite heavy 8:30 pm right now
+
+
 import request from '../utils/api'
 
 export const QUOTE_REQUEST = 'QUOTE_REQUEST'
